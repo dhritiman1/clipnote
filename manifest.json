@@ -1,0 +1,40 @@
+{
+  "manifest_version": 3,
+  "name": "clipnote",
+  "description": "Save selected text from articles or PDFs to a side panel.",
+  "version": "1.0",
+  "permissions": [
+    "contextMenus",
+    "storage",
+    "scripting",
+    "activeTab",
+    "sidePanel"
+  ],
+  "host_permissions": ["<all_urls>"],
+  "action": {
+    "default_icon": {
+      "16": "icons/icon-16.png"
+    },
+    "default_title": "click to open panel"
+  },
+  "commands": {
+    "saveText": {
+      "suggested_key": {
+        "default": "Alt+C"
+      },
+      "description": "Save selected text to the side panel"
+    },
+    "openSidebar": {
+      "suggested_key": {
+        "default": "Alt+Shift+C"
+      },
+      "description": "Open the sidebar"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  }
+}
