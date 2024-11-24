@@ -22,7 +22,12 @@ chrome.commands.onCommand.addListener((command) => {
 
           const selectedText = results[0]?.result;
           if (selectedText) {
-            console.log("selected text:", selectedText);
+            chrome.storage.local.get("selectedTexts", (data) => {
+              const selectedTexts = data.selectedTexts || [];
+              selectedTexts.push(selectedText);
+
+              chrome.storage.local.set({ selectedTexts: selectedTexts });
+            });
           } else {
             console.log("no text selected");
           }
@@ -34,7 +39,6 @@ chrome.commands.onCommand.addListener((command) => {
       path: "sidepanel.html",
       enabled: true,
     });
-    console.log("sidebar opened");
   }
 });
 
