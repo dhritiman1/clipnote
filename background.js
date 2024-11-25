@@ -22,11 +22,11 @@ chrome.commands.onCommand.addListener((command) => {
 
           const selectedText = results[0]?.result;
           if (selectedText) {
-            chrome.storage.local.get("selectedTexts", (data) => {
+            chrome.storage.local.get("savedTexts", (data) => {
               const selectedTexts = data.selectedTexts || [];
               selectedTexts.push(selectedText);
 
-              chrome.storage.local.set({ selectedTexts: selectedTexts });
+              chrome.storage.local.set({ savedTexts: selectedTexts });
             });
           } else {
             console.log("no text selected");

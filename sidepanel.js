@@ -1,8 +1,8 @@
-chrome.storage.local.get("selectedTexts", (data) => {
+chrome.storage.local.get("savedTexts", (data) => {
   const textContainer = document.getElementsByClassName("selected-texts")[0];
-  if (data.selectedTexts && data.selectedTexts.length > 0) {
+  if (data.savedTexts && data.savedTexts.length > 0) {
     textContainer.innerHTML = "";
-    data.selectedTexts.forEach((text) => {
+    data.savedTexts.forEach((text) => {
       const p = document.createElement("p");
       p.textContent = text;
       textContainer.appendChild(p);
