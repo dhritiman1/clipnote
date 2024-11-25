@@ -6,11 +6,12 @@ chrome.commands.onCommand.addListener((command) => {
   if (command === "saveText") {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (tabs.length === 0) return;
-      const tabId = tabs[0].id;
+      const tab = tabs[0];
+      const domain = new URL(tab.url);
 
       chrome.scripting.executeScript(
         {
-          target: { tabId },
+          target: { tabId: tab.id },
           func: getSelectedText,
         },
 
@@ -23,10 +24,11 @@ chrome.commands.onCommand.addListener((command) => {
           const selectedText = results[0]?.result;
           if (selectedText) {
             chrome.storage.local.get("savedTexts", (data) => {
-              const selectedTexts = data.selectedTexts || [];
-              selectedTexts.push(selectedText);
+              const savedTexts = data.savedTexts || {};
+              if (!savedTexts[domain]) savedTexts[domain] = [];
+              savedTexts[domain].push(selectedText);
 
-              chrome.storage.local.set({ savedTexts: selectedTexts });
+              chrome.storage.local.set({ savedTexts });
             });
           } else {
             console.log("no text selected");
