@@ -1,9 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    if (tabs.length == 0) return;
-
-    const taburl = new URL(tabs[0].url);
-
+  function updateSidebar(taburl) {
     chrome.storage.local.get("savedTexts", (data) => {
       const savedTexts = data.savedTexts || {};
       const texts = savedTexts[taburl] || [];
@@ -20,6 +16,20 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       } else {
         textContainer.textContent = "nothing saved yet!";
+      }
+    });
+  }
+
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    if (tabs.length == 0) return;
+
+    const taburl = new URL(tabs[0].url);
+
+    updateSidebar(taburl);
+
+    chrome.storage.onChanged.addListener((changes, area) => {
+      if (area === "local" && changes.savedTexts) {
+        updateSidebar(taburl);
       }
     });
   });
