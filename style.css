@@ -47,9 +47,35 @@ header > h1 {
   padding-top: 10px;
 }
 
-.selected-texts > p::before {
-  content: "- ";
-  width: max-content;
+.para {
+  color: #333;
+  line-height: 1.5;
+  margin: 0;
+  padding-right: 30px;
+  margin-bottom: 20px;
+}
+
+.para:hover {
+  box-shadow: #333 1 1 2;
+}
+
+.text-container {
+  position: relative;
+}
+
+.delete-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  /* opacity: 0; */
+  transition: opacity 0.2s ease;
+  border-radius: 50%;
+  padding: 4px;
 }
 
 
