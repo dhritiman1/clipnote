@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const dlBtn = document.getElementById("dl-btn");
   function updateSidebar(taburl) {
     chrome.storage.local.get("savedTexts", (data, index) => {
       const savedTexts = data.savedTexts || {};
@@ -36,6 +37,44 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+
+  function downloadMD(url) {
+    chrome.storage.local.get("savedTexts", (data) => {
+      const savedTexts = data.savedTexts || {};
+      const texts = savedTexts[url] || [];
+
+      if (texts.length === 0) {
+        return;
+      }
+
+      let markdown = ``;
+      texts.forEach((text) => {
+        markdown += `- ${text}\n`;
+      });
+
+      markdown += `\n > [ref](${url})\n`;
+
+      const blob = new Blob([markdown], { text: "text/markdown" });
+      const blobUrl = URL.createObjectURL(blob);
+
+      const dl = document.createElement("a");
+      dl.href = blobUrl;
+      dl.download = `${new Date()}.md`;
+      document.body.appendChild(dl);
+      dl.click();
+
+      document.body.removeChild(dl);
+      URL.revokeObjectURL(blobUrl);
+    });
+  }
+
+  dlBtn.addEventListener("click", () => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (tabs.length === 0) return;
+      const tabURL = new URL(tabs[0].url);
+      downloadMD(tabURL);
+    });
+  });
 
   function deleteText(index, url) {
     chrome.storage.local.get("savedTexts", (data) => {
